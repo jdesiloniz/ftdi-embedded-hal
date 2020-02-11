@@ -58,10 +58,10 @@ impl FTx232H {
             return Err(Error::new(ErrorKind::Other, "no FTDI device found"));
         }
 
-        context.set_write_chunksize(1024);
-        context.set_read_chunksize(1024);
+        context.set_write_chunksize(4096);
+        context.set_read_chunksize(4096);
         context.usb_reset()?;
-        context.set_latency_timer(5)?;
+        context.set_latency_timer(255)?;
         context.set_bitmode(0, BitMode::MPSSE)?;
         context.usb_purge_buffers()?;
 
