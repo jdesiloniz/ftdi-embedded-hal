@@ -34,6 +34,15 @@ impl<'a> SpiBus<'a> {
         }
     }
 
+    pub fn new_with_mode(ctx: &'a Mutex<RefCell<ftdi::Context>>, mode: Mode) -> SpiBus {
+        SpiBus {
+            ctx,
+            mode: mode,
+            cmd_r: MPSSECmd::MSB_RISING_EDGE_CLK_BYTE_IN,
+            cmd_w: MPSSECmd::MSB_FALLING_EDGE_CLK_BYTE_OUT,
+        }
+    }
+
     pub fn set_mode(&mut self, mode: Mode) -> Result<()> {
         if mode == MODE_0 {
             self.cmd_r = MPSSECmd::MSB_RISING_EDGE_CLK_BYTE_IN;

@@ -1,3 +1,5 @@
+pub use embedded_hal::spi::{Mode, Phase, Polarity};
+pub use embedded_hal::spi::{MODE_0, MODE_1, MODE_2, MODE_3};
 use ftdi::BitMode;
 pub use ftdi::Interface;
 
@@ -133,6 +135,10 @@ impl FTx232H {
     // spi/i2c buses
 
     pub fn spi(&self, speed: SpiSpeed) -> Result<SpiBus> {
+        self.spi_with_mode(speed, MODE_0)
+    }
+
+    pub fn spi_with_mode(&self, speed: SpiSpeed, mode: Mode) -> Result<SpiBus> {
         if (*self.i2c.borrow()).is_some() {
             return Err(Error::new(ErrorKind::Other, "can't use spi: i2c is active"));
         }
@@ -163,7 +169,7 @@ impl FTx232H {
             }
         }
 
-        Ok(SpiBus::new(&self.mtx))
+        Ok(SpiBus::new_with_mode(&self.mtx, mode))
     }
 
     pub fn i2c(&self, speed: I2cSpeed) -> Result<I2cBus> {

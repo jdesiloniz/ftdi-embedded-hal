@@ -1,5 +1,6 @@
 use crate::mpsse::MPSSECmd;
 
+use embedded_hal::digital::v2;
 use std::cell::RefCell;
 use std::fmt;
 use std::io::{Read, Write};
@@ -96,12 +97,28 @@ impl<'a> GpioPin<'a> {
     }
 }
 
-impl<'a> embedded_hal::digital::OutputPin for GpioPin<'a> {
+/*impl<'a> embedded_hal::digital::OutputPin for GpioPin<'a> {
     fn set_low(&mut self) {
         self.set_pin(false);
     }
 
     fn set_high(&mut self) {
         self.set_pin(true);
+    }
+}*/
+
+impl<'a> embedded_hal::digital::v2::OutputPin for GpioPin<'a> {
+    type Error = Box<dyn std::error::Error>;
+
+    fn set_low(&mut self) -> Result<(), Self::Error> {
+        self.set_pin(false);
+        Ok(())
+        //self.set_low()
+    }
+
+    fn set_high(&mut self) -> Result<(), Self::Error> {
+        self.set_pin(true);
+        Ok(())
+        //self.set_high()
     }
 }
